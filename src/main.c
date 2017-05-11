@@ -4,15 +4,15 @@
 int main()
 {
 	FILE *in = fopen("graph.txt", "r");
-	int graph[25];
-	int len[5];
-	int vis[5];
+	int graph[36];
+	int len[6];
+	int vis[6];
 
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < 36; i++) {
 		fscanf(in, "%d", &graph[i]);
 	}
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		len[i] = 100;
 		vis[i] = -1;
 	}
