@@ -1,51 +1,48 @@
-#include <stdio.h>
+#include "graph.h"
 
-int g_i(int i, int j)
+
+struct graph *graph_create(int vertices)
 {
-	return i * 5 + j;
+	struct graph *g;
+
+	g = malloc(sizeof(*g));
+	g->nvertices = vertices;
+	g->visited = malloc(sizeof(int) * vertices);
+	g->m = malloc(sizeof(int) * vertices * vertices);
+	graph_clear(g);
+	return g;
 }
 
-void all(int g[], int len[], int vis[]) {
-	for (int i = 0; i < 6; i++) {
-		if (g[g_i(0, i)] > 0 && g[g_i(0, i)] < len[i]) {
-				len[i] = g[g_i(0, i)];
-				vis[i] = 0;
-			}
-	}
-	
-	for (int i = 0; i < 6; i++) {
-		printf("%d)%d\t", i, len[i]);
-	}
-	printf("\n");
 
-	for (int i = 0; i < 6; i++) {
-		printf("%d)%d\t", i, vis[i]);
-	}
-	printf("\n\n");
+void graph_clear(struct graph *g)
+{
+	int i;
+	int j;
 
-	for (int z = 0; z < 6; z++) {
-		for (int i = 0; i < 6; i++) {
-			if (vis[i] == z) {
-				for (int j = 0; j < 6; j++) {
-					if (g[g_i(i, j)] > 0) {
-						if (g[g_i(i, j)] + len[i] < len[j]) {
-							len[j] = g[g_i(i, j)] + len[i];
-							vis[j] = i;
-						}
-					}
-				}
-				
-			}
+	for (i = 0; i < g->nvertices; i++) {
+		g->visited[i] = 0;
+		for (j = 0; j < g->nvertices; j++) {
+			g->m[i * g->nvertices + j] = 0;
 		}
 	}
+}
 
-	for (int i = 0; i < 6; i++) {
-		printf("%d)%d\t", i, len[i]);
-	}
-	printf("\n");
 
-	for (int i = 0; i < 6; i++) {
-		printf("%d)%d\t", i, vis[i]);
-	}
-	printf("\n");
+void graph_free(struct graph *g)
+{
+	free(g->m);
+	free(g);
+}
+
+
+void graph_set_edge(struct graph *g, int i, int j, int w)
+{
+	g->m[(i - 1) * g->nvertices + j - 1] = w;
+	g->m[(j - 1) * g->nvertices + i - 1] = w;
+}
+
+
+int graph_get_edge(struct graph *g, int i, int j)
+{
+	return g->m[(i - 1) * g->nvertices + j - 1];
 }
