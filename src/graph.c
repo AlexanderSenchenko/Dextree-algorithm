@@ -46,3 +46,26 @@ int graph_get_edge(struct graph *g, int i, int j)
 {
 	return g->m[(i - 1) * g->nvertices + j - 1];
 }
+
+void create_graph_image(Graph *g)
+{
+	//create_graph_image(g);
+	//system("dot -Tpng graph.gv -o graph.png");
+	//system("xdg-open graph.png ");
+
+	FILE *out = fopen("graph.gv", "w");
+	if (out == NULL) {
+		return;
+	}
+	int weight;
+	fprintf(out, "digraph HelloWorld {\n");
+	for (int i = 0; i < g->sity; i++) {
+		for (int j = 0; j < g->sity; j++) {
+			if ((weight = g->data[get_item(i, j, g)]) > 0) {
+				fprintf(out, "\t%d -> %d[label=%d];\n", i + 1, j + 1, weight);
+			}
+		}
+	}
+	fprintf(out, "}\n");
+	fclose(out);
+}
